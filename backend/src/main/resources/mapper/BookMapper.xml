@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.mapper.BookMapper">
+
+    <resultMap id="BaseResultMap" type="com.library.entity.Book">
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="title" property="title" />
+        <result column="author" property="author" />
+        <result column="category_id" property="categoryId" />
+        <result column="status" property="status" />
+        <result column="description" property="description" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="BookWithCategoryResultMap" type="com.library.entity.Book" extends="BaseResultMap">
+        <result column="category_name" property="categoryName" />
+    </resultMap>
+
+    <!-- 分页查询图书，支持搜索和分类筛选 -->
+    <select id="selectPageWithCategory" resultMap="BookWithCategoryResultMap">
+        SELECT b.*, c.name AS category_name
+        FROM book b
+        LEFT JOIN book_category c ON b.category_id = c.id
+        WHERE 1=1
+        <if test="keyword != null and keyword != ''">
+            AND (b.title LIKE CONCAT('%', #{keyword}, '%')
+                 OR b.author LIKE CONCAT('%', #{keyword}, '%')
+                 OR b.code LIKE CONCAT('%', #{keyword}, '%')
+                 OR b.description LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="categoryId != null and categoryId != 0">
+            AND b.category_id = #{categoryId}
+        </if>
+        ORDER BY b.id DESC
+    </select>
+
+    <!-- 根据ID查询图书详情，包含分类信息 -->
+    <select id="selectByIdWithCategory" resultMap="BookWithCategoryResultMap">
+        SELECT b.*, c.name AS category_name
+        FROM book b
+        LEFT JOIN book_category c ON b.category_id = c.id
+        WHERE b.id = #{id}
+    </select>
+
+    <!-- 批量更新图书状态 -->
+    <update id="updateBatchStatus">
+        UPDATE book
+        SET status = #{status}
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

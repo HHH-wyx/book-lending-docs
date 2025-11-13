@@ -1,0 +1,40 @@
+# Gemfile for GitHub Pages deployment
+# This file contains dependencies compatible with GitHub Pages environment
+
+# Use github-pages gem which includes Jekyll and compatible plugins
+gem 'github-pages', group: :jekyll_plugins
+
+# Keep minimum dependencies for compatibility with GitHub Pages
+gem 'jekyll', '~> 3.9.3'  # GitHub Pages supports Jekyll 3.9.3
+
+# Plugins already included in github-pages gem:
+# - jekyll-coffeescript
+# - jekyll-default-layout
+# - jekyll-gist
+# - jekyll-github-metadata
+# - jekyll-mentions
+# - jekyll-optional-front-matter
+# - jekyll-paginate
+# - jekyll-readme-index
+# - jekyll-redirect-from
+# - jekyll-relative-links
+# - jekyll-remote-theme
+# - jekyll-sass-converter
+# - jekyll-seo-tag
+# - jekyll-sitemap
+# - jekyll-titles-from-headings
+# - jemoji
+# - kramdown
+# - kramdown-parser-gfm
+# - liquid
+# - mercenary
+# - minima
+# - nokogiri
+# - rouge
+# - terminal-table
+
+# Development dependencies
+group :development do
+  gem 'jekyll-watch'
+  gem 'webrick', '~> 1.8'  # Required for Ruby 3.0+
+end

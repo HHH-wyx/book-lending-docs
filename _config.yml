@@ -1,0 +1,110 @@
+# 网站基本信息
+title: 图书借阅系统文档
+description: 图书借阅系统的官方文档和使用指南
+author:
+  name: 系统管理员
+  email: admin@example.com
+
+# 网站设置
+# GitHub Pages URL 格式: https://username.github.io/repository-name
+url: "https://username.github.io" # 替换为您的GitHub用户名
+baseurl: "/repository-name" # 替换为您的仓库名，若为主页则留空
+
+# 构建设置
+destination: ./_site
+
+# 主题设置
+theme: jekyll-theme-minimal
+
+# 插件配置 - 只使用GitHub Pages支持的插件
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-paginate
+  - jekyll-redirect-from
+  - jekyll-remote-theme
+  # 注意：以下插件不被GitHub Pages原生支持，部署时会被忽略
+  # - jekyll-include-cache
+  # - jekyll-last-modified-at
+  # - jekyll-toc
+  # - jekyll-lunr-js-search
+
+# 分页设置
+paginate: 5
+paginate_path: "/page:num/"
+
+# 其他设置
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/
+  - README.md
+  - LICENSE
+  - .gitignore
+  - .travis.yml
+
+# Markdown设置
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: highlight
+
+# Jekyll-TOC配置
+toc:
+  min_level: 2
+  max_level: 4
+  ordered_list: false
+  no_toc_section_class: no_toc_section
+
+# 远程主题设置（可选）
+# remote_theme: pages-themes/minimal@v0.2.0
+
+# 搜索功能配置 (本地开发使用，GitHub Pages部署时会被忽略)
+# lunr_search:
+#   js_dir: 'assets/js'
+#   css_dir: 'assets/css'
+#   excluded: ['index.html', '404.html']
+#   no_index: ['/tags/']
+
+# GitHub Pages特定配置
+github:
+  repository_name: repository-name
+  owner_name: username
+
+# 启用GitHub Pages元数据
+github_metadata: true
+
+# 时间设置
+timezone: Asia/Shanghai
+
+# 自定义集合（用于文档管理）
+collections:
+  documentation:
+    output: true
+    permalink: /:collection/:path/
+  api_reference:
+    output: true
+    permalink: /api/:path/
+
+# 静态文件目录
+include:
+  - .htaccess
+  - _pages
+
+# 自定义数据文件
+data_dir: '_data'
+
+# 压缩设置
+compress_html:
+  clippings: all
+  comments: all
+  endings: all
+  startings: [html, head, body]
+  blanklines: false
+  profile: false
+  ignore:
+    envs: [development]

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.mapper.BorrowRecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.library.entity.BorrowRecord">
+        <id column="id" property="id" />
+        <result column="book_id" property="bookId" />
+        <result column="user_name" property="userName" />
+        <result column="phone_number" property="phoneNumber" />
+        <result column="borrow_time" property="borrowTime" />
+        <result column="due_time" property="dueTime" />
+        <result column="return_time" property="returnTime" />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <resultMap id="BorrowRecordWithBookResultMap" type="com.library.entity.BorrowRecord" extends="BaseResultMap">
+        <result column="title" property="bookTitle" />
+        <result column="code" property="bookCode" />
+    </resultMap>
+
+    <!-- 分页查询借阅记录，包含图书信息 -->
+    <select id="selectPageWithBook" resultMap="BorrowRecordWithBookResultMap">
+        SELECT br.*, b.title, b.code
+        FROM borrow_record br
+        LEFT JOIN book b ON br.book_id = b.id
+        WHERE 1=1
+        <if test="keyword != null and keyword != ''">
+            AND (b.title LIKE CONCAT('%', #{keyword}, '%')
+                 OR b.code LIKE CONCAT('%', #{keyword}, '%')
+                 OR br.user_name LIKE CONCAT('%', #{keyword}, '%')
+                 OR br.phone_number LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+        <if test="status != null">
+            AND br.status = #{status}
+        </if>
+        <if test="phoneNumber != null and phoneNumber != ''">
+            AND br.phone_number = #{phoneNumber}
+        </if>
+        ORDER BY br.id DESC
+    </select>
+
+    <!-- 查询图书当前借阅记录（未归还） -->
+    <select id="selectCurrentByBookId" resultMap="BaseResultMap">
+        SELECT *
+        FROM borrow_record
+        WHERE book_id = #{bookId}
+          AND status = 0
+        ORDER BY id DESC
+        LIMIT 1
+    </select>
+
+    <!-- 根据图书ID和状态查询借阅记录 -->
+    <select id="selectByBookIdAndStatus" resultMap="BaseResultMap">
+        SELECT *
+        FROM borrow_record
+        WHERE book_id = #{bookId}
+          AND status = #{status}
+        ORDER BY id DESC
+    </select>
+
+    <!-- 根据手机号查询用户当前借阅记录 -->
+    <select id="selectByPhoneNumber" resultMap="BorrowRecordWithBookResultMap">
+        SELECT br.*, b.title, b.code
+        FROM borrow_record br
+        LEFT JOIN book b ON br.book_id = b.id
+        WHERE br.phone_number = #{phoneNumber}
+        <if test="status != null">
+            AND br.status = #{status}
+        </if>
+        ORDER BY br.id DESC
+    </select>
+
+</mapper>
